@@ -35,7 +35,10 @@ public class RealTimeService {
     {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .callTimeout(Duration.ofSeconds(2))
+                .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl("http://qt.gtimg.cn")
@@ -57,11 +60,12 @@ public class RealTimeService {
     }
 
     public RealTimeInfo get(String code) {
-        return cache.get(code);
+        return cache.getOrDefault(code, RealTimeInfo.defaultValue);
     }
 
     public List<String> allCodes() {
-        return ImmutableList.of("sh600329", "sz000651", "sh600036", "sh600900", "sh600887");
+        return ImmutableList.of("sh600329", "sz000651", "sh600887", "sh601288", "sh600036", "sh600900", "sh513300",
+                "sh513500", "sh518880");
     }
 
     private void load(String code) {
@@ -71,11 +75,11 @@ public class RealTimeService {
         Response<RealTimeInfo> resp = null;
         try {
             resp = qtService.realTime(code).execute();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        checkState(resp.isSuccessful());
+            checkState(resp.isSuccessful());
 
-        cache.put(code, resp.body());
+            cache.put(code, resp.body());
+        } catch (IOException e) {
+            System.out.println("Ops. " + e.getMessage());
+        }
     }
 }

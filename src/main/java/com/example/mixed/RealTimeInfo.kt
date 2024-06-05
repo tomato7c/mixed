@@ -6,4 +6,10 @@ data class RealTimeInfo(
         val curPrice: Double,
         val yesterdayPrice: Double,
         val time: String,
-        val percentage: String)
+        val percentage: String) {
+
+    companion object {
+        @JvmField
+        val defaultValue = RealTimeInfo("unknown", "unknown", -1.0, -1.0, "unknown", "unknown")
+    }
+}

@@ -23,8 +23,8 @@ public class RealTimeController {
         try (PrintWriter writer = response.getWriter()) {
             service.allCodes().forEach(it -> {
                 RealTimeInfo res = service.get(it);
-                writer.write(res.toString());
-                writer.write("</br> \r\n");
+                writer.write(PrintUtil.body(res));
+                writer.write("\r\n");
                 writer.flush();
             });
         }
