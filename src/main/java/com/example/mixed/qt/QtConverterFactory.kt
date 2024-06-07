@@ -26,6 +26,6 @@ class QtConverter : Converter<ResponseBody, RealTimeInfo> {
         val timeA = formatA.parse(arr[30])
         val timeB = formatB.format(timeA)
         return RealTimeInfo(code = arr[2], name = arr[1], curPrice = arr[3].toDouble(),
-                yesterdayPrice = arr[4].toDouble(), time = timeB, percentage = arr[32])
+                yesterdayPrice = arr[4].toDouble(), time = timeB, percentage = arr[32], pe = arr[39])
     }
 }
